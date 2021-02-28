@@ -1,6 +1,8 @@
-import logo from './logo.svg';
+//import logo from './logo.svg';
+import React, { Component } from 'react';
 import './App.css';
-
+import Subject from './components/page1';
+/*
 function App() {
   return (
     <div className="App">
@@ -20,6 +22,17 @@ function App() {
       </header>
     </div>
   );
+}
+*/
+class App extends Component {
+  render() {
+    return (
+      <div className="App">
+        <h1>ACTS</h1>
+        <Subject title="Hello Web" sub="links"> </Subject>
+      </div>
+    );
+  }
 }
 
 export default App;
