@@ -2,6 +2,8 @@
 import React, { Component } from 'react';
 import './App.css';
 import Subject from './components/page1';
+import {BrowserRouter as Router, Route} from 'react-router-dom';
+import Home from './routes/Home';
 /*
 function App() {
   return (
@@ -23,7 +25,8 @@ function App() {
     </div>
   );
 }
-*/
+
+
 class App extends Component {
   render() {
     return (
@@ -34,5 +37,16 @@ class App extends Component {
     );
   }
 }
+*/
+
+const App = () => {
+  return (
+    <Router>
+      <div>
+        <Route path="/" component={Home}/>
+      </div>
+    </Router>
+  );
+};
 
 export default App;

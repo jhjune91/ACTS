@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>aaS.Simple example - Leaflet</title>
+	<meta charset="utf-8" />
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<link rel="shortcut icon" type="image/x-icon" href="docs/images/favicon.ico" />
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css" integrity="sha512-xodZBNTC5n17Xt2atTPuE1HxjVMSvLVW9ocqUKLsCC5CXdbqCmblAshOMAS6/keqq/sMZMZ19scR4PsZChSR7A==" crossorigin=""/>
+    <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js" integrity="sha512-XQoYMqMTK8LvdxXYG3nZ448hOEQiglfqkJs1NOQV44cWnUrBc8PkAOcXy20w0vlaXaVUearIOBhiXZ5V3ynxwA==" crossorigin=""></script>
+	<style>
+		html, body {
+			height: 100%;
+			margin: 0;
+		}
+		#map {
+			width: 400px;
+			height: 400px;
+		}
+	</style>
+</head>
+<body>
+<div id='map'></div>
+<script>
+	var map = L.map('map', {
+		crs: L.CRS.Simple,
+		center: [186.5, 121.5],
+		minZoom: -1,
+		maxZoom: 5
+	    //zoomSnap: 0,
+		//zoomDelta: 0.25
+	});
+	var yx = L.latLng;
+	var xy = function(x, y) {
+		if (L.Util.isArray(x)) {    // When doing xy([x, y]);
+			return yx(x[1], x[0]);
+		}
+		return yx(y, x);  // When doing xy(x, y);
+	};
+	var bounds = [xy(0, 0), xy(243, 193)];
+	var image = L.imageOverlay('small_warehouse.png', bounds).addTo(map);
+	var sol      = xy(0, 0);
+	var mizar    = xy( 41.6, 130.1);
+	var kruegerZ = xy( 13.4,  56.5);
+	var deneb    = xy(243,   193);
+
+	var ZoomViewer = L.Control.extend({
+		onAdd: function(){
+
+			var container= L.DomUtil.create('div');
+			var gauge = L.DomUtil.create('div');
+			container.style.width = '200px';
+			container.style.background = 'rgba(255,255,255,0.5)';
+			container.style.textAlign = 'left';
+			map.on('zoomstart zoom zoomend', function(ev){
+				gauge.innerHTML = 'Zoom level: ' + map.getZoom();
+			})
+			container.appendChild(gauge);
+
+			return container;
+		}
+	});
+	
+	L.control.scale().addTo(map);
+	L.marker(     sol).addTo(map).bindPopup(      'Sol');
+	L.marker(   mizar).addTo(map).bindPopup(    'Mizar');
+	L.marker(kruegerZ).addTo(map).bindPopup('Krueger-Z');
+	var new_popup = L.popup({"autoClose": false, "closeOnClick": null}).setContent('<p>Hello world!<br />This is a nice popup.</p>');
+	L.marker(   deneb).addTo(map).bindPopup(new_popup);
+	var travel = L.polyline([sol, deneb]).addTo(map);
+	(new ZoomViewer).addTo(map);
+	map.setView(xy(120, 70), 1);
+	map.fitBounds(bounds);
+</script>
+</body>
+</html>
